@@ -1,0 +1,636 @@
+täisarvud: byte, short, int ja long (vastavalt 8-, 16-, 32- ja 64-bitilised);
+ujukomaarvud: float ja double (vastavalt 32- ja 64-bitilised);
+Unicode-sümbolid: char (16-bitilised);
+tõeväärtused: boolean (true või false).
+
+liitmine (+)
+lahutamine (-)
+korrutamine (*)
+jagamine (/)
+jäägi leidmine (%)
+
+class Keskmised {
+ //meetodi loomine 
+ //double-mida tagastab
+ //() argumendid, mida ette anda
+  static double aritkeskmine(double arv1, double arv2) {
+    double summa = arv1 + arv2;
+    return summa / 2;
+  }
+ 
+  public static void main(String[] args) {
+    double a = 1.5;
+    double b = 2.25;
+    double c = aritkeskmine(a, b);
+    System.out.println("Arvude " + a + " ja " + b + " aritmeetiline keskmine on " + c);
+    System.out.println("Arvude 3.4 ja -3.4 aritmeetiline keskmine on " + aritkeskmine(-3.4, 3.4));
+  }
+}
+
+//if lause NB! break; peatab edasi mineku
+if (loogiline avaldis) {
+    direktiivid1
+}
+else {
+    direktiivid2
+}
+
+// for tsükkel
+for (eeltegevused; jätkamistingimus; sammu järeltegevused) {
+    // käsud, mida tuleb täita niikaua,
+    // kui jätkamistingimus kehtib
+}
+
+//näide tsükkel
+for (int i = 0; i < arvud.length; i++) {
+  System.out.println(arvud[i]);
+}
+
+//alternatiivne for-tsükkel
+for (int elem : a){
+     System.out.println(elem);
+}
+
+
+//samad:
+i = i + 1;
+j = j + 2;
+k = k - 1;
+i++;
+j+=2;
+k--;
+
+//while tsükkel
+while (jätkamistingimus) {
+    // Siia kirjutame käsud, mida tuleb täita niikaua,
+    // kui tsükli päises olev jätkamistingimus kehtib.
+}
+
+
+//skänneri näide klaviatuurilt lugemiseks
+import java.util.Scanner;
+ 
+class Klaviatuurilt {
+ 
+  public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    System.out.println("Sisesta täisarv");
+    int taisarv = scan.nextInt();
+    System.out.println("Sisesta reaalarv");
+    double ujukomaArv = scan.nextDouble();
+    System.out.println("Sisestasid täisarvu: " + taisarv);
+    System.out.println(" ja reaalarvu: " + ujukomaArv);
+  }
+ 
+}
+
+//skänneri kasutamine failist lugemiseks
+
+try (java.util.Scanner sc = new Scanner(fail, "UTF-8")) {
+  // kood, mis kasutab faili
+} 
+
+while (sc.hasNextLine()) {
+    String rida = sc.nextLine();
+    String[] tükid = rida.split(" ");
+    System.out.print(tükid[tükid.length-2]+" "+tükid[tükid.length-1]);
+    System.out.println();
+}
+
+
+//Kui on tarvis juhuslikku täisarvu, siis oleks sobivaks teeks näiteks reaalarvulise juhusliku arvu ümardamine. 
+//Tähele tuleb panna, et Math.random tagastab double-tüüpi arvu, kuid Math.round tagastab double-tüüpi argumendi puhul 
+//long-tüüpi täisarvu. Niisiis toimivad kenasti järgmised omistamised:
+//[0,0; 1,0)
+//suurem/võrdne kui 15 ja väiksem kui 20
+double reaalJuhuarv = Math.random()*5+15;
+long longJuhuarv = Math.round(Math.random()*5+15);
+//Kui aga tahaksime int-tüüpi juhuslikku arvu, siis on vajalik tüübiteisendus:
+int taisJuhuarv = (int)Math.round(Math.random()*5+15);
+
+//Signatuur on meetodi (või konstruktori) iseloomustus, mis koosneb nimest ning formaalsete parameetrite tüüpide loetelust. 
+//Näiteks kui meetodi päis on static double korrutaKolmArvu (double a, double b, double c),
+//siis signatuur on korrutaKolmArvu(double, double, double).
+
+
+//Järjend
+
+int[] a = {10, 9, 12, 11, 8};
+
+või
+
+int[] a = new int[5];
+a[0] = 10;
+a[1] = 9;
+a[2] = 12;
+a[3] = 11;
+a[4] = 8;
+
+//Järjendi läbikäimine
+
+for (int i = 0; i < a.length; i++) {
+    System.out.println(a[i]);
+}
+
+
+//sõnemassiiv
+
+String[] sõned = {"Ilus", "punane", "maasikas"};
+või
+
+String[] sõned = new String[pikkus];
+
+
+//isendid
+class Isik {
+ 
+  String nimi;      // isendiväli isiku nime jaoks
+  double pikkus;    // isendiväli isiku pikkuse jaoks
+}
+
+//isendite kasutamine
+class TestIsik {
+ 
+  public static void main(String[] args) {
+    Isik a = new Isik();
+    a.pikkus=2.05;
+  }
+  
+//konstruktor
+class Isik {
+ 
+  String nimi; // isendiväli isiku nime jaoks
+  double pikkus; // isendiväli isiku pikkuse jaoks
+ 
+  // konstruktor
+  Isik(String isikuNimi, double isikuPikkus) {
+    nimi = isikuNimi;
+    pikkus = isikuPikkus;
+  }
+}
+
+//isendi loomine konstruktoriga
+Isik a = new Isik("Juhan Juurikas", 1.99);
+Isik b = new Isik("Madli Mallikas", 1.55);
+
+//toString
+public String toString() {
+  return "(" + nimi + "; " + pikkus + ")";
+}
+
+//Getter- Privaatse isendivälja väärtuse tuvastamiseks on mõeldud nn. piilumeetod, mille peamiseks ülesandeks on tagastada vastava muutuja väärtus. 
+public String getNimi() {
+  return nimi;
+}
+ 
+public double getPikkus() {
+  return pikkus;
+}
+//Setter Analoogiliselt saab luua ka meetodid väärtuste muutmiseks
+
+public void setNimi(String nimi) {
+  this.nimi = nimi;
+}
+ 
+public void setPikkus(double pikkus) {
+  this.pikkus = pikkus;
+}
+}
+
+//kasutamine
+a.setNimi("Evelin");
+a.getNimi();
+
+//string loomine
+
+String teade = "Tere hommikust";
+//NB! Jutumärkide kasutamiseks sõnes: "\"".)
+
+//mida sõnedega teha annab!
+public class TestString {
+    public static void main(String[] args) {
+ 
+        String nimi = "Mart Mardikas";
+ 
+        System.out.println("Sõne pikkus on: " + nimi.length()); // 13
+        System.out.println(nimi.startsWith("Mart")); // true
+        System.out.println(nimi.endsWith("kas")); // true
+        System.out.println(nimi.endsWith("Mart")); // false
+        System.out.println("'a' esimene positsioon: " +
+                           nimi.indexOf('a')); // 1
+ 
+        int rIndex = nimi.indexOf('r');
+        System.out.println("'r' esimene positsioon: " + rIndex); // 2
+        System.out.println("'r' jargmine positsioon: " +
+                           nimi.indexOf('r', rIndex + 1)); // 7
+ 
+        int aIndex = nimi.lastIndexOf('a');
+        System.out.println("'a' viimane positsioon: " + aIndex); // 11
+        System.out.println("Alamsõne \"Mardi\" algus: " +
+                           nimi.indexOf("Mardi")); // 5
+        System.out.println("4. täht on "+nimi.charAt(3)); // 't'
+ 
+        //Täpne võrdsuse kontroll:
+        System.out.println(nimi.equals("Mart Mardikas")); // true
+        System.out.println(nimi.equals("mart mardikas")); // false
+ 
+        //Suuri-väikesi tähti mitteeristav võrdsuse kontroll:
+        System.out.println(nimi.equalsIgnoreCase("mart mardikas"));  // true
+ 
+        //Leksikograafiline võrdlemine:
+        System.out.println(nimi.compareTo("Jaan Jaaniste")); // >0
+        System.out.println(nimi.compareTo("Peeter Paan")); // <0
+        System.out.println(nimi.compareTo("Mart Mardikas")); // =0
+ 
+        System.out.println(nimi.replace('M', 'P')); // "Part Pardikas"
+        System.out.println(nimi.toUpperCase()); // "MART MARDIKAS"
+ 
+        //Sõne ilma alguses ja lõpus olevate tühikute ja reavahetusteta
+        String imelik = " Mart \n";
+        System.out.println(imelik.trim()); // "Mart"
+    }
+}
+
+
+//Sõne tükeldamine
+String[] tükid = nimi.split(" ");
+for (int i = 0; i<tükid.length; i++)
+    System.out.println(tükid[i]);
+    
+//sõnede võrdlus equals abil! (võrdlusmärk pole õige, ses kasutataks viitasid!)
+System.out.println(teade1.equals(teade2));
+System.out.println(teade2.equals(teade3));
+
+//sõne muutmine StringBuilder
+append (lõppu lisamine, suurendab vajadusel automaatselt puhvrit)
+capacity (maht)
+charAt (sümbol vastaval kohal)
+delete (kustutamine)
+insert (lisamine vastavale kohale)
+length (pikkus)
+setCharAt (sümboli asendamine vastaval kohal)
+setLength (pikkuse muutmine)
+indexOf (otsimine)
+toString (sõneks teisendamine)
+replace (asendamine)
+reverse (transponeerimine)
+
+int[] arvud = { 3, 5, 7, 11 };
+StringBuilder sb = new StringBuilder(50); // küsime 50 tähemärgi jagu puhvrit
+sb.append("esimesed algarvud on ");
+for (int arv : arvud) {
+  sb.append(arv);
+  sb.append(' ');
+}
+String tulemus = sb.toString();
+Täpselt sama tulemus on ka järgneval koodil:
+
+String tulemus = "esimesed algarvud on ";
+for (int arv : arvud) {
+  tulemus = tulemus + arv + ' ';
+}
+
+StringBuilder sb = new StringBuilder("esimesed algarvud on 3 5 7 11");
+int i = sb.indexOf(" ", "esimesed algarvud on ".length()); // tühik pärast “3”
+while (i != -1) {
+  sb.replace(i, i + 1, ",");
+  i = sb.indexOf(" ", i + 1);
+}
+System.out.println(sb); // “esimesed algarvud on 3,5,7,11”
+
+//sõnest arvu saamine
+Integer intObjekt3 = Integer.valueOf("19");
+
+//arvust sõne
+double arvdouble4 = Double.parseDouble("21");
+int arvint4 = Integer.parseInt("1CE",16);
+
+//faili leidmiseks
+java.io.File fail = new java.io.File("c:/temp/marsruut.txt");
+
+//faili kirjutamine
+NB! failiga tööks vajalik visata 
+public static void main(String[] args) throws Exception
+try (java.io.PrintWriter pw = new java.io.PrintWriter(fail, "UTF-8")) {
+  // kood, mis kasutab faili
+}
+
+try (java.io.PrintWriter pw = new java.io.PrintWriter(fail, "UTF-8")) {
+  pw.print("Karl Ernst von Baeri ");
+  pw.println("tänav");
+  pw.print("Johann Wilhelm Friedrich Hezeli ");
+  pw.println("tänav");
+  pw.print("Juhan Liivi ");
+  pw.println("tänav");
+}
+
+//ArrayList näide
+ArrayList<Integer> list1 = new ArrayList<>();
+list1.add(1);
+list1.add(2);
+list1.add(3);
+
+//või 
+list2.addAll(Arrays.asList(1,2,3));
+
+
+Listiga teha:
+elemendi võtmine indeksi järgi, nt. list.get(2) (NB! indeksid algavad 0-st)
+elemendi lisamine listi lõppu (list.add(780)) või määratud positsioonile (list.add(3, 780))
+mitme elemendi lisamine (list.addAll(mingiTeineList))
+elemendi eemaldamine indeksi järgi (list.remove(3))
+sisalduvuse kontroll (list.contains(780))
+sisalduvuse kontroll koos indeksi tagastamisega (list.indexOf(780))
+pikkuse küsimine (list.size())
+Listi väljastamiseks võib aga ei pea kasutama tsükklit!
+
+
+//Listi ümberpööramine
+public static ArrayList<Integer> reverse(ArrayList<Integer> list) {
+    ArrayList<Integer> tulemus = new ArrayList<>();
+    for (int i = list.size()-1; i >= 0; i--) {
+        tulemus.add(list.get(i));
+    }
+   return tulemus;
+}
+
+ArrayList<Integer> intList = new ArrayList<>();
+intList.addAll(Arrays.asList(1,2,3));
+System.out.println(reverse(intList));
+
+//element listi keskele
+ArrayList<Integer> list3 = new ArrayList<>();
+list3.addAll(Arrays.asList(1,2,3));
+list3.add(2, 54); // '54' saab 3. elemendiks (indeksiga 2)
+System.out.println(list3);
+
+//Näide
+
+public class IdKaart {
+  private String isikukood;
+  public IdKaart(String isikukood) {
+    this.isikukood = isikukood;
+  }
+  public boolean onVähemalt12Aastane() {
+    int praeguneAasta = LocalDate.now().getYear();
+    return sünniaasta() <= praeguneAasta - 12;
+  }
+  private int sünniaasta() { // 4. praktikumi 2. harjutus
+    int algus = Integer.parseInt(isikukood.substring(0, 1));
+    int aasta = Integer.parseInt(isikukood.substring(1, 3));
+    if (algus <= 2)
+      return 1800 + aasta;
+    if (algus <= 4)
+      return 1900 + aasta;
+    if (algus <= 6)
+      return 2000 + aasta;
+    return 2100 + aasta;
+  }
+}
+public class Õpilaspilet {
+  private int sünniaasta;
+  public Õpilaspilet(int sünniaasta) {
+    this.sünniaasta = sünniaasta;
+  }
+  public boolean onVähemalt12Aastane() {
+    return sünniaasta + 12 <= LocalDate.now().getYear();
+  }
+}
+public class AmeerikaMäed {
+  public boolean vanusedSobivad(IdKaart[] idKaardid, Õpilaspilet[] õpilaspiletid) {
+    for (IdKaart id : idKaardid) {
+      if (!id.onVähemalt12Aastane())
+        return false;
+    }
+    for (Õpilaspilet pilet : õpilaspiletid) {
+      if (!pilet.onVähemalt12Aastane())
+        return false;
+    }
+    return true;
+  }
+}
+
+//Liides
+Liides (interface) on süntaksi mõttes klassile sarnane struktuur, mis kirjeldab komplekti meetodeid. Kirja pannakse meetodite nimed, tagastustüübid ja parameetrite tüübid, aga meetodi kehad jäetakse täpsustamata. Eesmärk on kirjeldada funktsionaalsust, mis mingil objektil peaks olema. Seejuures räägitakse ainult oodatavast käitumisest, aga mitte sellest, mis klassi objektiga tegu on, ega täpsest algoritmist, mida funktsionaalsuse saavutamiseks kasutatakse. Mõned näited:
+
+public interface Hulknurk {
+  // Hulknurga pindala arvutatakse eri kujundite puhul erinevalt. Liides ütleb, et
+  // objektil peaks selline meetod olema, aga ei täpsusta, mis valemit kasutatakse.
+  double pindala();
+ 
+  // hulknurga nurkade arv sõltub kujundist, aga seda peab saama tuvastada
+  int nurkadeArv();
+}
+public interface Väljund {
+  // ei täpsusta, kas väljastatakse faili või käsureale või kuhugi mujale
+  void väljasta(String väärtus);
+}
+
+
+public class Kolmnurk implements Hulknurk {
+  private double a, b, c; // küljed
+  public Kolmnurk(double a, double b, double c) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+  }
+  public double pindala() {
+    // Heroni valem
+    double s = (a + b + c) / 2.0;
+    return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+  }
+  public int nurkadeArv() {
+    return 3;
+  }
+  public boolean onTäisnurkne() {
+    // Klassis peavad olema realiseeritud kõik liidese meetodid, aga see ei tähenda,
+    // et kõik klassi meetodid peavad olema liideses kirjeldatud. Liidesega klass
+    // on ikka tavaline klass, kuhu võib oma soovi järgi igasuguseid meetodeid lisada.
+    double[] abc = {a, b, c};
+    java.util.Arrays.sort(abc);
+    double kaatet1 = abc[0] * abc[0];
+    double kaatet2 = abc[1] * abc[1];
+    double hüpotenuus = abc[2] * abc[2];
+    return Math.abs(kaatet1 + kaatet2 - hüpotenuus) < 0.001; // ümardusviga
+  }
+}
+
+
+Kolmnurk kolmnurk = new Kolmnurk(3, 4, 5);
+Hulknurk hulknurk = kolmnurk; // toimib, sest Kolmnurk realiseerib Hulknurka!
+System.out.println(kolmnurk.nurkadeArv()); // 3
+System.out.println(hulknurk.nurkadeArv()); // 3
+static void näidisMeetod(Hulknurk h) { ... }
+ 
+näidisMeetod(kolmnurk);
+näidisMeetod(new Kolmnurk(3, 4, 5));
+
+Liides on tüüp. Seda saab kasutada lokaalse muutuja tüübina, isendivälja tüübina, meetodi parameetri tüübina jne - täpselt nagu klassi.
+Liidesest ei saa isendeid luua (new Hulknurk() ei kompileeru), sest seal on meetodite kehad puudu. Isendeid saab luua klassidest, mis liidest realiseerivad.
+Mitu erinevat klassi saavad realiseerida sama liidest (nt Kolmnurk ja Nelinurk).
+Üks klass saab realiseerida mitu liidest. Liideste nimed eraldatakse komaga: class TekstiFail implements Sisend, Väljund { .. }
+Kui liidese meetodil ei ole piiritlejat (public/private), siis loetakse see public meetodiks. Isegi, kui liideses ei ole public võtmesõna välja kirjutatud, peab meetodit realiseerivas klassis public välja kirjutama.
+
+Kolmnurk kolmnurk = new Kolmnurk(3, 4, 5);
+System.out.println(kolmnurk.getClass()); // class Kolmnurk
+Hulknurk hulknurk = new Kolmnurk(3, 4, 5);
+System.out.println(hulknurk.getClass()); // class Kolmnurk
+ 
+hulknurk.onTäisnurkne(); // compile error: cannot resolve method
+Kolmnurk samaKolmnurk = hulknurk; // compile error: incompatible types
+
+
+public class Kolmnurk implements Hulknurk, Comparable<Kolmnurk> {
+  public int compareTo(Kolmnurk võrreldav) {
+    if (pindala() < võrreldav.pindala())
+      return -1; // negatiivne arv näitab, et this on väiksem kui võrreldav
+    if (pindala() > võrreldav.pindala())
+      return 1; // positiivne arv näitab, et this on suurem kui võrreldav
+    return 0; // null tähendab, et mõlemad on võrdsed
+  }
+  // ülejäänud kood sama
+}
+
+//pärilus
+public class Klient {
+ 
+  private int isikukood;
+  private double saldo;
+  private List<String> tehingud = new ArrayList<>();
+ 
+  public Klient(int isikukood, double saldo) {
+    this.isikukood = isikukood;
+    this.saldo = saldo;
+  }
+ 
+  public void teostaÜlekanne(String kontole, double summa) {
+    tehingud.add("ülekanne kontole " + kontole + ", summa " + summa);
+    saldo -= summa;
+  }
+ 
+  public double arvutaTehinguTasud() {
+    return 0.1 * tehingud.size();
+  }
+ 
+  public String toString() {
+    return "klient " + isikukood + ", saldo " + saldo;
+  }
+}
+
+//päritakse kliendi omadused!
+public class Kuldklient extends Klient {
+ 
+  private String kliendiHaldur;
+ 
+  public Kuldklient(int isikukood, double saldo, String kliendiHaldur) {
+    super(isikukood, saldo); // Klient konstruktori käivitamine
+    this.kliendiHaldur = kliendiHaldur;
+  }
+  
+//ülekatmine
+public class Kuldklient extends Klient {
+ 
+  private String kliendiHaldur;
+ 
+  public Kuldklient(int isikukood, double saldo, String kliendiHaldur) {
+    super(isikukood, saldo);
+    this.kliendiHaldur = kliendiHaldur;
+  }
+ 
+  @Override
+  public double arvutaTehinguTasud() {
+    return 10.0; // alati sama teenustasu sõltumata tehingute arvust
+  }
+}
+
+//
+static void kasutaKlienti(Klient k) { ... }
+static void kasutaObjekti(Object o) { ... }
+ 
+Kuldklient kuld = new Kuldklient(...);
+Klient tava = kuld; // toimib, sest Kuldklient on Kliendi alamklass
+Object obj = kuld; // toimib, sest Klient on Object alamklass
+kasutaKlienti(kuld); // OK
+kasutaObjekti(new Klient(...)); // OK, siia sobib kõik peale primitiivide
+List<Klient> kliendid = new ArrayList<>();
+kliendid.add(tava);
+kliendid.add(kuld); // Kuldklient on ka Klient
+kliendid.add(obj); // kompilaator kurdab: iga Object ei ole Klient
+Kuldklient teineKuld = tava; // kompilaator kurdab: iga Klient ei ole Kuldklient
+}
+
+
+//
+
+public class KampaaniaKuldklient extends Kuldklient {
+  public KampaaniaKuldklient(int isikukood, double saldo, String kliendiHaldur, double aktsiaPortfelliVäärtus) {
+    super(isikukood, saldo, kliendiHaldur, aktsiaPortfelliVäärtus);
+  }
+}
+ 
+KampaaniaKuldklient k = new KampaaniaKuldklient(1, 100, "andrus", 3000);
+
+//
+KampaaniaKuldklient k = new KampaaniaKuldklient(1, 100, "andrus", 3000);
+k.toString(); // käivitub meetod toString klassist Kuldklient
+Object o = new KampaaniaKuldklient(2, 50, "jaana", 4000);
+o.toString(); // hoolimata muutuja tüübist on tegu KampaaniaKuldklient isendiga. käivitub meetod toString klassist Kuldklient
+
+//
+// class Kuldklient
+public double säästetudTehinguTasud() {
+  // käivitab Kuldklient klassis oleva meetodi
+  double soodusTasud = arvutaTehinguTasud();
+  // käivitab Klient klassis oleva meetodi
+  double tavakliendiTasud = super.arvutaTehinguTasud();
+  return tavakliendiTasud - soodusTasud;
+}
+
+//Abstraktne klass- kõigi meetodite sisu ei täpsustatagi - mõned meetodid koosnevad vaid n-ö laiendatud signatuuridest (meetodi nimi koos formaalsete parameetritega ja nende tüüpidega, piiritlejad ja tagastustüüp) ning sisu jäetakse alamklasside täpsustada. Selliseid klasse nimetatakse abstraktseteks. Abstraktne klass on mitmes mõttes sarnane liidestega - võibki mõelda, et liides on abstraktse klassi erijuht, kus kõik klassi meetodid on abstraktsed.
+class Isik {
+  private String eesnimi;
+  private String perenimi;
+  Isik(String eesnimi, String perenimi) {
+    this.eesnimi = eesnimi;
+    this.perenimi = perenimi;
+  }
+}
+ 
+abstract class IsikuFailistLugeja {
+ 
+  protected abstract Isik ridaIsikuks(String rida);
+ 
+  public List<Isik> loeIsikud(File sisend) throws Exception {
+    // Files.readAllLines saab kasutada, et kiirelt etteantud failist kõik read listi lugeda
+    List<String> read = Files.readAllLines(sisend.toPath(), StandardCharsets.UTF_8);
+    List<Isik> isikud = new ArrayList<>();
+    for (String rida : read) {
+      isikud.add(ridaIsikuks(rida));
+    }
+    return isikud;
+  }
+}
+ 
+class EesnimiPerenimiLugeja extends IsikuFailistLugeja {
+  protected Isik ridaIsikuks(String rida) {
+    String[] nimeOsad = rida.split(" "); // Malle Mallikas
+    return new Isik(nimeOsad[0], nimeOsad[1]);
+  }
+}
+ 
+class PerenimiEesnimiLugeja extends IsikuFailistLugeja {
+  protected Isik ridaIsikuks(String rida) {
+    String[] nimeOsad = rida.split(", "); // Mallikas, Malle
+    return new Isik(nimeOsad[1], nimeOsad[0]);
+  }
+}
+ 
+class DemoAbstract {
+  public static void main(String[] args) throws Exception {
+    EesnimiPerenimiLugeja epLugeja = new EesnimiPerenimiLugeja();
+    List<Isik> nimed = epLugeja.loeIsikud(new File("nimed.txt"));
+    IsikuFailistLugeja teineLugeja = new PerenimiEesnimiLugeja();
+    List<Isik> ametlikudNimed = teineLugeja.loeIsikud(new File("ametlikud-nimed.txt"));
+    // IsikuFailistLugeja lugeja = new IsikuFailistLugeja(); // viga!
+  }
+}
