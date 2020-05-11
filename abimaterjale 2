@@ -1,0 +1,509 @@
+//Programm, mis jooksvas kataloogis leiab laiendita failid ja lisab neile laiendi
+import java.io.File;
+ 
+public class MuudaFailinimed {
+  public static void main(String[] args) throws Exception {
+    File dir = new File(".");
+    String[] failid = dir.list();
+    for (String fail : failid) {
+      File vana = new File(fail);
+      if (vana.isFile() && !fail.contains(".")) {
+        File uus = new File(fail + ".txt");
+        vana.renameTo(uus);
+        System.out.println("Muudetud " + vana.getName() + " -> " + uus.getName());
+      }
+    }
+  }
+}
+
+//baitide lugemiseks
+abstract class InputStream {
+  // tagastab järgmise baidi väärtuse või -1, kui rohkem lugeda ei saa
+  int read();
+  // loeb voost 1 <= n <= buf.length baiti ja paneb need massiivi buf
+  // tagastab loetud baitide arvu või -1, kui rohkem lugeda ei saa
+  // NB! loeb täiesti ettearvamatu arvu baite! ära eelda, et buf alati täidetud saab.
+  int read(byte[] buf);
+  // vabastab vooga seotud ressurssid
+  void close();
+}
+ 
+abstract class OutputStream {
+  // kirjutab ühe baidi
+  void write(int b);
+  // kirjutab osa massiivist
+  void write(byte[] buf, int offset, int length);
+  // vabastab vooga seotud ressurssid
+  void close();
+}
+
+//Programm, mis teeb koopia etteantud failist:
+import java.io.*;
+ 
+public class KopeeriFail {
+ 
+  private static void kopeeri(String algne, String koopia) throws Exception {
+    // sulgudes semikoolonit kasutades saab mitu faili avada
+    try (InputStream sisse = new FileInputStream(algne);
+         OutputStream välja = new FileOutputStream(koopia)) {
+      byte[] puhver = new byte[1024];
+      int loetud = sisse.read(puhver);
+      while (loetud > 0) {
+        välja.write(puhver, 0, loetud); // ainult andmetega täidetud osa!
+        loetud = sisse.read(puhver); // loeme järgmise tüki
+      }
+    }
+  }
+ 
+  public static void main(String[] args) throws Exception {
+    if (args.length != 1) {
+      System.out.println("Kas sa andsid käsurealt faili nime?");
+      System.exit(1);
+    }
+    kopeeri(args[0], args[0] + ".copy");
+  }
+}
+
+//tähemärkide dekodeerimiseks baitidest
+class InputStreamReader {
+  // loeb ja dekodeerib baite tähemärkideks
+  // toimib nagu InputStream.read, aga puhvri tüüp on byte[] asemel char[]
+  int read(char[] cbuf);
+}
+ 
+class OutputStreamWriter {
+  // kodeerib sõne baitideks ja kirjutab need voogu
+  void write(String str);
+}
+
+try (InputStream sisse = new FileInputStream("sisend.txt");
+     InputStreamReader tekstSisse = new InputStreamReader(sisse, "UTF-8")) {
+  // faili kasutamine
+}
+ 
+try (OutputStream välja = new FileOutputStream("väljund.txt");
+     OutputStreamWriter tekstVälja = new OutputStreamWriter(välja, "UTF-8")) {
+  tekstVälja.write("hello world!");
+}
+
+try (InputStream baidid = new FileInputStream("sisend.txt");
+     InputStreamReader tekst = new InputStreamReader(baidid, "UTF-8");
+     BufferedReader puhverdatud = new BufferedReader(tekst)) {
+  String rida = puhverdatud.readLine();
+  while (rida != null) {
+    System.out.println("lugesin voost: " + rida);
+    rida = puhverdatud.readLine(); // loeb järgmise rea. kui ei saa, tagastab nulli
+  }
+}
+
+
+try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("sisend.txt"), "UTF-8"))) {
+  // faili kasutamine
+}
+
+
+InputStream sisse = System.in;
+OutputStream välja = System.out;
+
+
+InputStream sisse = new URL("http://ut.ee/").openStream();
+ZIP failidest saab pakitud failidega tegeleda ZipInputStream ja ZipOutputStream abil.
+
+
+new InputStreamReader(new FileInputStream("kassipilt.jpg"));
+new InputStreamReader(System.in);
+new InputStreamReader(new URL("http://ut.ee/").openStream());
+
+byte[] terveFail;
+try (InputStream voog = new FileInputStream("kassipilt.jpg")) {
+  terveFail = voog.readAllBytes();
+}
+// kasuta faili sisu
+
+
+import java.io.*;
+import java.util.zip.*;
+ 
+public class Zipper {
+  public static void zipi(String pakitavFail, String zipFail) throws Exception {
+    try (ZipOutputStream zipVäljund = new ZipOutputStream(new FileOutputStream(zipFail));
+         FileInputStream sisendFail = new FileInputStream(pakitavFail)) {
+      // ettevalmistus zip-faili väljastuseks
+      zipVäljund.putNextEntry(new ZipEntry(pakitavFail));
+      // sisendfailist lugemine ja zip-faili kirjutamine
+      byte[] buf = new byte[1024]; // andmevahetusbuffer
+      int len;
+      while ((len = sisendFail.read(buf)) > 0) { // omistamine ja kontroll kombineeritud
+        zipVäljund.write(buf, 0, len); // (andmed, nihe, pikkus)
+      }
+    }
+  }
+}
+
+public class Toode {
+  private String nimi;
+  private double kogus;
+  private double tükiHind;
+ 
+  public Toode(String nimi, double kogus, double tükiHind) {
+    this.nimi = nimi;
+    this.kogus = kogus;
+    this.tükiHind = tükiHind;
+  }
+}
+ 
+public class Ostukorv {
+  private String klient;
+  private List<Toode> tooted;
+ 
+  public Ostukorv(String klient, List<Toode> tooted) {
+    this.klient = klient;
+    this.tooted = tooted;
+  }
+}
+
+public class OstukorviTest {
+  public static void main(String[] args) throws Exception {
+    Toode shokolaad = new Toode("shokolaad", 2.0, 1.29);
+    Toode apelsin = new Toode("apelsin", 2.5, 0.89);
+    Ostukorv ostukorv = new Ostukorv("Ats", Arrays.asList(shokolaad, apelsin));
+ 
+    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("andmed.bin"))) {
+      ostukorv.salvesta(dos);
+    }
+ 
+    try (DataInputStream dis = new DataInputStream(new FileInputStream("andmed.bin"))) {
+      Ostukorv sisseLaetud = Ostukorv.laadi(dis); // samad andmed, mis algses
+    }
+  }
+}
+
+// class Toode
+public void salvesta(DataOutputStream dos) throws Exception {
+  dos.writeUTF(nimi); // sisuliselt writeString
+  dos.writeDouble(kogus);
+  dos.writeDouble(tükiHind);
+}
+ 
+// class Ostukorv
+public void salvesta(DataOutputStream dos) throws Exception {
+  dos.writeUTF(klient);
+  dos.writeInt(tooted.size());
+  for (Toode toode : tooted) {
+    toode.salvesta(dos);
+  }
+}
+
+// class Toode
+public static Toode laadi(DataInputStream dis) throws Exception {
+  String nimi = dis.readUTF();
+  double kogus = dis.readDouble();
+  double tükiHind = dis.readDouble();
+  return new Toode(nimi, kogus, tükiHind);
+}
+ 
+// class Ostukorv
+public static Ostukorv laadi(DataInputStream dis) throws Exception {
+  String klient = dis.readUTF();
+  List<Toode> tooted = new ArrayList<>();
+  int tooteid = dis.readInt(); // ära pane for tsükli tingimusse
+  for (int i = 0; i < tooteid; i++) {
+    tooted.add(Toode.laadi(dis));
+  }
+  return new Ostukorv(klient, tooted);
+}
+
+int[] numbrid = { 1, 2, 3 };
+System.out.println(numbrid[42]); // ArrayIndexOutOfBoundsException
+int n = Integer.parseInt("tekst"); // NumberFormatException
+String väärtustamata = null;
+väärtustamata.length(); // NullPointerException
+
+static int faktoriaal(int n) {
+  if (n < 0)
+    throw new IllegalArgumentException("N ei saa olla negatiivne!");
+  int tulemus = 1;
+  for (int i = n; i > 1; i--)
+    tulemus = tulemus * i;
+  return tulemus;
+}
+
+import java.io.*;
+import java.util.*;
+ 
+public class FailiLugeja1 {
+  public static void main(String[] args) {
+    Scanner sisend = new Scanner(System.in);
+    System.out.println("Sisesta faili nimi: ");
+    String failiNimi = sisend.nextLine();
+    while (true) {
+      // faili avamine võib visata erindi
+      try (Scanner failiLugeja = new Scanner(new File(failiNimi), "UTF-8")) {
+        // kui eelmine rida viskas erindi, siis seda plokki ei täideta
+        System.out.println("failiLugeja on valmis");
+        // siin saab failiga toimetada
+        break;
+      } catch (FileNotFoundException e) {
+        System.out.println("Sellist faili ei leitud. Sisesta uus faili nimi: ");
+        failiNimi = sisend.nextLine();
+      }
+    }
+  }
+}
+
+class FailiLugeja2 {
+ 
+  public static void main(String[] args) throws IOException {
+    try (BufferedReader lugeja = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"))) {
+      loeRead(lugeja);
+    }
+  }
+ 
+  // proovi throws IOException ära võtta ja vaata, mis kompilaator arvab
+  private static void loeRead(BufferedReader lugeja) throws IOException {
+    while (true) {
+      String rida = lugeja.readLine(); // võib visata IOExceptioni
+      if (rida == null)
+        break; // faili lõpp
+      System.out.println(rida);
+    }
+  }
+}
+
+
+try {
+  mingiErinditViskavMeetod();
+} catch (Exception e) {
+  e.printStackTrace(); // TODO autogenerated catch -- ÄRA NII TEE
+}
+
+public static String esimeneRida(File fail) throws IOException {
+  BufferedReader lugeja = new BufferedReader(new InputStreamReader(new FileInputStream(fail), "UTF-8"));
+  String rida = lugeja.readLine();
+  lugeja.close();
+  return rida;
+}
+
+public static String esimeneRida(File fail) throws IOException {
+  BufferedReader lugeja = new BufferedReader(new InputStreamReader(new FileInputStream(fail), "UTF-8"));
+  try {
+    return lugeja.readLine();
+  } finally {
+    lugeja.close(); // käivitatakse ka try plokis tekkinud erindi korral
+  }
+}
+
+try (InputStream is = new FileInputStream("fail.txt")) {
+  ..
+  return result;
+} catch (IOException e) {
+  // kui visati IOException
+} catch (RuntimeException e) {
+  // kui visati RuntimeException
+} finally {
+  // seda tehakse igal juhul
+}
+@Override
+public void handle(ActionEvent event) {
+  try (FileInputStream reader = new FileInputStream("andmed.txt")) {
+    ...
+  } catch (FileNotFoundException e) {
+    throw new RuntimeException(e);
+  }
+}
+
+public class VigaseReaErind extends RuntimeException {
+  private int rida;
+ 
+  public VigaseReaErind(int rida, NumberFormatException teisendusViga) {
+    super("vigased andmed real " + rida, teisendusViga);
+    this.rida = rida;
+  }
+ 
+  public int reaNumber() {
+    return rida;
+  }
+}
+ 
+public class FailiLugeja3 {
+  public static void main(String[] args) throws IOException {
+    try (BufferedReader lugeja = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"))) {
+      System.out.println(loeFailiSisu(lugeja));
+    } catch (VigaseReaErind e) {
+      System.out.println("reanumber: " + e.reaNumber());
+      throw e; // viskame edasi, sest ei oska korda teha
+    }
+  }
+ 
+  private static List<Integer> loeFailiSisu(BufferedReader lugeja) throws IOException {
+    List<Integer> read = new ArrayList<>();
+    int reaNumber = 1;
+    while (true) {
+      String rida = lugeja.readLine();
+      if (rida == null)
+        break;
+      try {
+        read.add(Integer.parseInt(rida));
+        reaNumber++;
+      } catch (NumberFormatException e) {
+        throw new VigaseReaErind(reaNumber, e);
+      }
+    }
+    return read;
+  }
+}
+
+ArrayList LinkedList
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+...
+List<Integer> list1 = new ArrayList<>();
+list1.add(42);
+List<Integer> list2 = new ArrayList<>();
+list2.addAll(Arrays.asList(1,2,3));
+// veel lühem
+List<Integer> list3 = Arrays.asList(1,2,3);
+// eelnevad read juba vihjasid, et järjendi saab konvertida listiks
+Integer[] jarjend = {1, 2, 3};
+List<Integer> list4 = Arrays.asList(jarjend);
+// listi konvertimine järjendiks on veidi peenem töö
+Integer[] jarjend2 = list4.toArray(new Integer[0]);
+// listist koopia tegemine
+List<Integer> list5 = new ArrayList<>(list4);
+
+List<String> list6 = Arrays.asList("aa","ccc","b");
+// compareTo lambda, mis võtab parameetriks kaks sõne ja tagastab int
+Collections.sort(list6, (s1, s2) -> s1.length() - s2.length());
+
+
+// näide listi keskele elemendi lisamisest
+// NB! töötab ka ArrayList-iga
+List<Integer> list2 = new LinkedList<Integer>();
+list2.addAll(Arrays.asList(1,2,3));
+list2.add(2, 54); // '54' saab 3. elemendiks (indeksiga 2)
+
+//Magasin LIFO
+
+// sisseehitatud liides Deque (double-ended queue) sisaldab magasini funktsionaalsust
+Deque<Integer> magasin = new ArrayDeque<>();
+magasin.push(1);
+magasin.push(2);
+magasin.push(3);
+System.out.print(magasin.pop()); // 3
+System.out.print(magasin.pop()); // 2
+System.out.print(magasin.pop()); // 1
+
+//push(x) lisab elemendi x listi lõppu (magasini tippu). Meetod pop() eemaldab magasini tipuelemendi (listi viimase elemendi) ja tagastab selle.
+//järjekord FIFO
+
+// sisseehitatud liides Queue sisaldab järjekorra funktsionaalsust
+Queue<String> linnadMidaKülastada = new LinkedList<>();
+linnadMidaKülastada.add("Tartu"); // lisab lõppu
+linnadMidaKülastada.add("Paide");
+linnadMidaKülastada.add("Tallinn");
+while (!linnadMidaKülastada.isEmpty()) {
+  System.out.println(linnadMidaKülastada.remove()); // eemaldab algusest
+}
+
+//elemente lisatakse (add) alati järjendi lõppu ja neid eemaldatakse (remove) alati järjendi algusest
+
+//map
+
+Map<String, Integer> telefoniraamat = new HashMap<>();
+telefoniraamat.put("Peeter Peet", 5562356);
+telefoniraamat.put("Mari Maasikas", 53438956);
+System.out.println("Mari number on " + telefoniraamat.get("Mari Maasikas"));
+Kui get-iga küsitakse mingit elementi, mida kujutuses ei leidu, siis tagastatakse null.
+
+//hulk
+
+Set<String> meiliAadressid = new HashSet<>();
+meiliAadressid.add("example@example.com");
+meiliAadressid.add("java-is-awesome@example.com");
+meiliAadressid.add("example@example.com"); // aadressi ei lisata, sest see on juba olemas
+for (String aadress : meiliAadressid) {
+  System.out.println(aadress);
+}
+ 
+List<String> nimed = Arrays.asList("Märt", "Taavi", "Aivar", "Marina", "Aivar");
+// loob hulga, kus on kõik nimed ühekordselt
+Set<String> unikaalsedNimed = new HashSet<>(nimed);
+// teeme hulgast uuesti listi
+nimed = new ArrayList<>(unikaalsedNimed);
+
+//Põhilised hulga meetodid on elemendi lisamine (add), sisalduvuse kontroll (contains) ja hulga läbimine (tsükliga läbi vaatamine).
+
+//andmestruktuuride kombineerimine
+Map<String, Set<String>> järgnevused = new HashMap<>();
+järgnevused.put("kala", new HashSet<>());
+järgnevused.get("kala").add("ujub");
+järgnevused.get("kala").add("praadima");
+
+//equalsh and hashcode
+
+public class Klient {
+  private int kliendiNumber;
+  public Klient(int kliendinumber) {
+    this.kliendiNumber = kliendinumber;
+  }
+}
+ 
+public class Test {
+  public static void main(String[] args) {
+    Klient klient = new Klient(123);
+    Klient samaKlient = new Klient(123);
+    List<Klient> kliendid = Arrays.asList(klient);
+    System.out.println(kliendid.contains(samaKlient)); // false
+ 
+    Integer kliendiNumber = new Integer(123);
+    Integer samaKliendiNumber = new Integer(123);
+    List<Integer> kliendiNumbrid = Arrays.asList(kliendiNumber);
+    System.out.println(kliendiNumbrid.contains(samaKliendiNumber)); // true
+  }
+}
+
+
+//geneerilised tüübid
+public class Hoidja<T> {
+ 
+  private T hoitavObjekt;
+ 
+  public T getHoitavObjekt() {
+    return hoitavObjekt;
+  }
+ 
+  public void setHoitavObjekt(T hoitavObjekt) {
+    this.hoitavObjekt = hoitavObjekt;
+  }
+}
+ 
+public class Test {
+  public static void main(String[] args) {
+    Hoidja<Integer> intHoidja = new Hoidja<>();
+    intHoidja.setHoitavObjekt(99);
+    Hoidja<String> strHoidja = new Hoidja<>();
+    strHoidja.setHoitavObjekt("hurraa!");
+  }
+}
+
+public class NumbriHoidja<N extends Number> {
+ 
+  private N hoitavNumber;
+ 
+  public N getHoitavNumber() {
+    return hoitavNumber;
+  }
+ 
+  public void setHoitavNumber(N hoitavNumber) {
+    this.hoitavNumber = hoitavNumber;
+  }
+}
+
+public static <T> List<T> reverse(List<T> list) {
+  List<T> tulemus = new ArrayList<T>();
+  for (int i = list.size()-1; i >= 0; i--) {
+    tulemus.add(list.get(i));
+  }
+  return tulemus;
+}
